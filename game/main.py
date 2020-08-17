@@ -13,6 +13,10 @@ class Game(object):
     PLAYER_1_COLOR = 'cyan'
     PLAYER_2_COLOR = 'yellow'
 
+    GAME_STARTED = 'started'
+    GAME_PLAY = 'play'
+    GAME_OVER = 'over'
+
     def __init__(self, player_1, player_2):
         self.logger = get_logger()
         self.logger.info("Starting game...")
@@ -27,7 +31,8 @@ class Game(object):
         self.logger.info("Assingning opponents...")
         self.player_1.set_opponent_board(self.board_2)
         self.player_2.set_opponent_board(self.board_1)
-        self.logger.info('Game started.')
+        self.logger.info('Game started. Start placing ships!')
+        self.status = self.GAME_STARTED
 
     def play(self):
         self.logger.info('Locking boards...')
@@ -39,12 +44,15 @@ class Game(object):
             p1=self.player_1.name,
             p2=self.player_2.name,
         ))
+        self.status = self.GAME_PLAY
 
     def reverse_turns(self):
         self.player_1.reverse_turn()
         self.player_2.reverse_turn()
 
     def place_ships_for_player_1(self, ship_locations):
+        if self.status != self.GAME_STARTED:
+            raise Exception("Game not started. You have to register the players and start a new game first.")
         for ship_position in ship_locations:
             self.board_1.place_ship(**ship_position.export())
             self.logger.info("Placing ships for {player}: {row}{col} {ship} {aligment}".format(
@@ -54,8 +62,11 @@ class Game(object):
                 ship=ship_position.ship.NAME,
                 aligment=ship_position.aligment,
             ))
+        self.logger.info("Are you ready? switch to play mode to start shooting!")
 
     def place_ships_for_player_2(self, ship_locations):
+        if self.status != self.GAME_STARTED:
+            raise Exception("Game not started. You have to register the players and start a new game first.")
         for ship_position in ship_locations:
             self.board_2.place_ship(**ship_position.export())
             self.logger.info("Placing ships for {player}: {row}{col} {ship} {aligment}".format(
@@ -65,8 +76,14 @@ class Game(object):
                 ship=ship_position.ship.NAME,
                 aligment=ship_position.aligment,
             ))
+        self.logger.info("Are you ready? switch to play mode to start shooting!")
 
     def shoot(self, row, col):
+        if self.status == self.GAME_OVER:
+            raise Exception('Game over!')
+        if self.status == self.GAME_STARTED:
+            raise Exception('You have to switch to play mode to start shooting!')
+
         if self.player_1.is_my_turn:
             self.player_1.shoot(row, col)
             self.logger.info("Go ahead {}! it's your turn.".format(self.player_2.name))
@@ -77,8 +94,10 @@ class Game(object):
 
         if self.board_1.are_all_ships_sunk:
             self.logger.info('Player {} wins!'.format(self.player_2.name))
+            self.status = self.GAME_OVER
         elif self.board_2.are_all_ships_sunk:
             self.logger.info('Player {} wins!'.format(self.player_1.name))
+            self.status = self.GAME_OVER
 
     def display_stats(self):
         self.board_1.display_shoots()
@@ -91,6 +110,9 @@ class Game(object):
             self.logger.info('Player {} wins!'.format(self.player_2.name))
         elif self.board_2.are_all_ships_sunk:
             self.logger.info('Player {} wins!'.format(self.player_1.name))
+
+    def restart(self):
+        raise NotImplementedError('TODO')
 
 
 def demo_match():
