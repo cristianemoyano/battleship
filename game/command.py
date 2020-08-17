@@ -44,22 +44,50 @@ class BattleshipCLI(Cmd):
         print("Battleship CLI Instructions.")
 
     def do_p1(self, name):
-        self.player_1 = Player(name=name)
+        error = False
+        try:
+            if str(self.player_2.name).lower() == str(name).lower():
+                self.logger.error("Name '{}' already taken for the Player 2".format(name))
+                error = True
+        except AttributeError:
+            error = False
+
+        if not error:
+            self.player_1 = Player(name=name)
 
     def help_p1(self):
         print("Set Player 1")
 
     def do_p2(self, name):
-        self.player_2 = Player(name=name)
+        error = False
+        try:
+            if str(self.player_1.name).lower() == str(name).lower():
+                self.logger.error("Name '{}' already taken for the Player 1".format(name))
+                error = True
+        except AttributeError:
+            error = False
+
+        if not error:
+            self.player_2 = Player(name=name)
 
     def help_p2(self):
         print("Set Player 2")
 
     def do_start(self, _):
-        self.game = Game(
-            player_1=self.player_1,
-            player_2=self.player_2,
-        )
+        try:
+            self.game = Game(
+                player_1=self.player_1,
+                player_2=self.player_2,
+            )
+        except AttributeError as exc:
+            if 'player_1' in str(exc):
+                self.logger.error("Game cannot start: You need to create the Player 1: p1 <name> .")
+
+            elif 'player_2' in str(exc):
+                self.logger.error("Game cannot start: You need to create the Player 2: p2 <name> .")
+
+        except Exception as exc:
+            self.logger.error("Error: {}".format(str(exc)))
 
     def help_start(self):
         print("Start game")
@@ -163,7 +191,12 @@ class BattleshipCLI(Cmd):
             'cols': self.ALL_COLS,
             'c': self.ALL_COLS,
         }
-        print(resource_map[str(resource).lower()])
+        try:
+            print(resource_map[str(resource).lower()])
+        except KeyError as exc:
+            self.logger.error("Resource not found: {}".format(str(exc)))
+        except Exception as exc:
+            self.logger.error("Error: {}".format(str(exc)))
 
     def help_ls(self):
         print(
