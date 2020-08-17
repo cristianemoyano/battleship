@@ -1,10 +1,15 @@
 # Battleship CLI
 
 
+
+
 	Battleship CLI
     --------------
-
-    $ python3 game/cli.py
+    
+    $  git clone https://github.com/cristianemoyano/battleship.git
+    $  cd battleship
+    $  pip install -r requirements.txt
+    $  python3 game/cli.py
 
     INSTRUCTIONS
     ------------
