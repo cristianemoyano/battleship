@@ -44,31 +44,33 @@ class BattleshipCLI(Cmd):
         print("Battleship CLI Instructions.")
 
     def do_p1(self, name):
-        error = False
+        if not name:
+            self.logger.error("Name cannot be empty.".format(name))
+            return None
         try:
             if str(self.player_2.name).lower() == str(name).lower():
                 self.logger.error("Name '{}' already taken for the Player 2".format(name))
-                error = True
+                return None
         except AttributeError:
-            error = False
+            pass
 
-        if not error:
-            self.player_1 = Player(name=name)
+        self.player_1 = Player(name=name)
 
     def help_p1(self):
         print("Set Player 1")
 
     def do_p2(self, name):
-        error = False
+        if not name:
+            self.logger.error("Name cannot be empty.".format(name))
+            return None
         try:
             if str(self.player_1.name).lower() == str(name).lower():
                 self.logger.error("Name '{}' already taken for the Player 1".format(name))
-                error = True
+                return None
         except AttributeError:
-            error = False
+            pass
 
-        if not error:
-            self.player_2 = Player(name=name)
+        self.player_2 = Player(name=name)
 
     def help_p2(self):
         print("Set Player 2")
@@ -146,41 +148,20 @@ class BattleshipCLI(Cmd):
     def help_play(self):
         print("Start shooting!")
 
-    def do_shoot_p1(self, row_col):
+    def do_shoot(self, row_col):
         row, col = row_col.split(' ')
         try:
-            self.player_1.shoot(row, col)
-            self.game.reverse_turns()
-            self.logger.info("Go ahead {}! it's your turn.".format(self.player_2.name))
+            self.game.shoot(row, col)
         except AttributeError as exc:
             self.logger.error("Error: Game not started. Details: {}".format(str(exc)))
         except Exception as exc:
             self.logger.error("Error: {}".format(str(exc)))
 
-    def help_shoot_p1(self):
+    def help_shoot(self):
         print(
             (
-                "Shoot ships from Player 1 to Player 2: Format: row col "
-                "Example: shoot_p1 A 1"
-            )
-        )
-
-    def do_shoot_p2(self, row_col):
-        row, col = row_col.split(' ')
-        try:
-            self.player_2.shoot(row, col)
-            self.game.reverse_turns()
-            self.logger.info("Go ahead {}! it's your turn.".format(self.player_1.name))
-        except AttributeError as exc:
-            self.logger.error("Error: Game not started. Details: {}".format(str(exc)))
-        except Exception as exc:
-            self.logger.error("Error: {}".format(str(exc)))
-
-    def help_shoot_p2(self):
-        print(
-            (
-                "Shoot ships from Player 2 to Player 1: Format: row col "
-                "Example: shoot_p2 A 1"
+                "Shoot ships according to the turn. Format: row col "
+                "Example: shoot A 1"
             )
         )
 

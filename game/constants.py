@@ -118,13 +118,12 @@ INSTRUCTIONS = '''
     battleship> play
 
 
-    5. Finally, each player can start shooting at each other:
+    5. Finally, each player can start shooting at each other (Always start playing Player 1):
 
-    battleship> shoot_p1 <row> <col>		// e.g. shoot_p1 A 1
+    battleship> shoot <row> <col>		// e.g. shoot A 1
 
-    battleship> shoot_p2 <row> <col>		// e.g. shoot_p2 A 1
 
     Tips:
-    - Run 'help shoot_p1' or 'help shoot_p2' to see the usage.
+    - Run 'help shoot' to see the usage.
 
 '''

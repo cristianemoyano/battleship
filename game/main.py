@@ -66,6 +66,20 @@ class Game(object):
                 aligment=ship_position.aligment,
             ))
 
+    def shoot(self, row, col):
+        if self.player_1.is_my_turn:
+            self.player_1.shoot(row, col)
+            self.logger.info("Go ahead {}! it's your turn.".format(self.player_2.name))
+        elif self.player_2.is_my_turn:
+            self.player_2.shoot(row, col)
+            self.logger.info("Go ahead {}! it's your turn.".format(self.player_1.name))
+        self.reverse_turns()
+
+        if self.board_1.are_all_ships_sunk:
+            self.logger.info('Player {} wins!'.format(self.player_2.name))
+        elif self.board_2.are_all_ships_sunk:
+            self.logger.info('Player {} wins!'.format(self.player_1.name))
+
     def display_stats(self):
         self.board_1.display_shoots()
         self.board_1.display_ship_statuses()
@@ -99,25 +113,24 @@ def demo_match():
     ])
     game.play()
     # Game play
-    player_1.shoot('A', '3')
-    player_1.shoot('A', '4')
-    player_1.shoot('A', '5')
-    player_1.shoot('A', '6')
-    player_1.shoot('A', '6')
-    player_1.shoot('A', '8')
-    player_1.shoot('D', '4')
-    player_1.shoot('E', '4')
-    player_1.shoot('F', '4')
-    player_1.shoot('G', '4')
-    player_1.shoot('H', '4')
-
-    player_2.shoot('D', '4')
-    player_2.shoot('E', '4')
-    player_2.shoot('F', '4')
-    player_2.shoot('G', '4')
-    player_2.shoot('H', '4')
-    player_2.shoot('A', '3')
-    player_2.shoot('A', '4')
+    game.shoot('A', '3')
+    game.shoot('D', '4')
+    game.shoot('A', '4')
+    game.shoot('E', '4')
+    game.shoot('A', '5')
+    game.shoot('F', '4')
+    game.shoot('A', '6')
+    game.shoot('G', '4')
+    game.shoot('A', '6')
+    game.shoot('H', '4')
+    game.shoot('A', '8')
+    game.shoot('A', '3')
+    game.shoot('D', '4')
+    game.shoot('A', '4')
+    game.shoot('E', '4')
+    game.shoot('F', '4')
+    game.shoot('G', '4')
+    game.shoot('H', '4')
 
     # Display stats
     game.display_stats()
