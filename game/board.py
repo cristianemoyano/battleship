@@ -124,7 +124,7 @@ class GameBoard(object):
             return self.MISS
 
     def display_shoots(self):
-        self.log_msg('Shoots: {} \n'.format(len(self.player.shoots)))
+        self.log_msg('Shoots: {}'.format(len(self.player.shoots)))
         for shoot in self.player.shoots:
             self.log_msg('{row}{col} : {re}'.format(row=shoot['row'], col=shoot['col'], re=shoot['result'],))
 

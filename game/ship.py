@@ -32,8 +32,9 @@ class Ship(object):
 
     @property
     def status(self):
+        total = Decimal(100)
         status = (Decimal(self._status) * Decimal(100)) / Decimal(self.LENGH)
-        return '{} %'.format(status)
+        return '{} %'.format(total - status)
 
     @property
     def is_sunk(self):
