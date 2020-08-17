@@ -35,6 +35,8 @@ class Game(object):
         self.status = self.GAME_STARTED
 
     def play(self):
+        if not self.board_1.get_all_ships() or not self.board_2.get_all_ships():
+            raise Exception('No ships added. You have to place some ships before to start playing.')
         self.logger.info('Locking boards...')
         self.board_1.lock_board()
         self.board_2.lock_board()
@@ -80,7 +82,7 @@ class Game(object):
 
     def shoot(self, row, col):
         if self.status == self.GAME_OVER:
-            raise Exception('Game over!')
+            raise Exception('Game over! restart the game to continue playing.')
         if self.status == self.GAME_STARTED:
             raise Exception('You have to switch to play mode to start shooting!')
 
@@ -112,7 +114,16 @@ class Game(object):
             self.logger.info('Player {} wins!'.format(self.player_1.name))
 
     def restart(self):
-        raise NotImplementedError('TODO')
+        self.board_1.unlock_board()
+        self.board_2.unlock_board()
+        self.board_1.init_board()
+        self.board_2.init_board()
+        self.player_1.reset_shoots()
+        self.player_2.reset_shoots()
+        self.player_1.reset_turns()
+        self.player_2.reset_turns()
+        self.status = self.GAME_STARTED
+        self.logger.info('Game restarted. Start placing ships!')
 
 
 def demo_match():

@@ -5,14 +5,20 @@ class Player(object):
     """docstring for Player"""
     def __init__(self, name):
         self.logger = get_logger()
-        self._is_my_turn = False
+        self.reset_turns()
         self.name = name
-        self._shoots = []
+        self.reset_shoots()
         self._opponent_board = None
         self.logger.info("Player: '{}' created.".format(name))
 
     def set_opponent_board(self, opponent_board):
         self._opponent_board = opponent_board
+
+    def reset_shoots(self):
+        self._shoots = []
+
+    def reset_turns(self):
+        self._is_my_turn = False
 
     @property
     def is_my_turn(self):

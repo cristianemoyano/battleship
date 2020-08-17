@@ -18,7 +18,7 @@ class GameBoard(object):
 
     def __init__(self, player, color):
         self.is_board_locked = False
-        self.board = self.init_board()
+        self.init_board()
         self.player = player
         self.color = color
 
@@ -35,8 +35,8 @@ class GameBoard(object):
         return self.ROWS_NAMES[index]
 
     def init_board(self):
-        # Returns Dict: { ('row', 'col'): {}  }
-        return {(row, col): {} for col in self.COLS_NAMES for row in self.ROWS_NAMES}
+        # Dict: { ('row', 'col'): {}  }
+        self.board = {(row, col): {} for col in self.COLS_NAMES for row in self.ROWS_NAMES}
 
     def _validate_place_params(self, row, col, ship, aligment):
         row = str(row).upper()
@@ -125,8 +125,9 @@ class GameBoard(object):
 
     def display_shoots(self):
         self.log_msg('Shoots: {}'.format(len(self.player.shoots)))
+        self.log_msg("References: [{h}] - HIT | [{m}] - MISS".format(h=self.HIT, m=self.MISS))
         for shoot in self.player.shoots:
-            self.log_msg('{row}{col} : {re}'.format(row=shoot['row'], col=shoot['col'], re=shoot['result'],))
+            self.log_msg('{row}{col} : [{re}]'.format(row=shoot['row'], col=shoot['col'], re=shoot['result'],))
 
     def display_ship_statuses(self):
         all_ships = self.get_all_ships()
@@ -135,6 +136,9 @@ class GameBoard(object):
 
     def lock_board(self):
         self.is_board_locked = True
+
+    def unlock_board(self):
+        self.is_board_locked = False
 
     def log_msg(self, msg):
         print(colored('{name} - {msg}'.format(name=self.player.name, msg=msg), self.color))

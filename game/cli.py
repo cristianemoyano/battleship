@@ -143,7 +143,12 @@ class BattleshipCLI(Cmd):
         )
 
     def do_play(self, _):
-        self.game.play()
+        try:
+            self.game.play()
+        except AttributeError as exc:
+            self.logger.error("Error: Game not started. Details: {}".format(str(exc)))
+        except Exception as exc:
+            self.logger.error("Error: {}".format(str(exc)))
 
     def help_play(self):
         print("Start shooting!")
@@ -201,6 +206,17 @@ class BattleshipCLI(Cmd):
 
     def help_stats(self):
         print("Display game stats")
+
+    def do_restart(self, _):
+        try:
+            self.game.restart()
+        except AttributeError as exc:
+            self.logger.error("Error: Game not started. Details: {}".format(str(exc)))
+        except Exception as exc:
+            self.logger.error("Error: {}".format(str(exc)))
+
+    def help_restart(self):
+        print("Restart the game, Using the same players.")
 
 
 if __name__ == "__main__":
