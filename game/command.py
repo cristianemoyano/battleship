@@ -150,6 +150,8 @@ class BattleshipCLI(Cmd):
         row, col = row_col.split(' ')
         try:
             self.player_1.shoot(row, col)
+            self.game.reverse_turns()
+            self.logger.info("Go ahead {}! it's your turn.".format(self.player_2.name))
         except AttributeError as exc:
             self.logger.error("Error: Game not started. Details: {}".format(str(exc)))
         except Exception as exc:
@@ -167,6 +169,8 @@ class BattleshipCLI(Cmd):
         row, col = row_col.split(' ')
         try:
             self.player_2.shoot(row, col)
+            self.game.reverse_turns()
+            self.logger.info("Go ahead {}! it's your turn.".format(self.player_1.name))
         except AttributeError as exc:
             self.logger.error("Error: Game not started. Details: {}".format(str(exc)))
         except Exception as exc:

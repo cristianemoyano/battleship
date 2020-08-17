@@ -30,9 +30,19 @@ class Game(object):
         self.logger.info('Game started.')
 
     def play(self):
-        self.logger.info("Start shooting!")
+        self.logger.info('Locking boards...')
         self.board_1.lock_board()
         self.board_2.lock_board()
+        self.logger.info('Done. You cannot add more ships.')
+        self.player_1.reverse_turn()
+        self.logger.info("Start shooting {p1}! Then {p2} is your turn.".format(
+            p1=self.player_1.name,
+            p2=self.player_2.name,
+        ))
+
+    def reverse_turns(self):
+        self.player_1.reverse_turn()
+        self.player_2.reverse_turn()
 
     def place_ships_for_player_1(self, ship_locations):
         for ship_position in ship_locations:
