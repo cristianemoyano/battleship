@@ -8,7 +8,7 @@
     
     $  git clone https://github.com/cristianemoyano/battleship.git
     $  cd battleship
-    $  pip install -r requirements.txt
+    $  pipenv install
     $  python3 game/cli.py
 
     INSTRUCTIONS
