@@ -11,6 +11,7 @@ ipython = "*"
 termcolor = "*"
 colorlog = "*"
 django = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"
